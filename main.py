@@ -220,9 +220,9 @@ async def start(ctx):
                         time.sleep(1)
                         sell = ftx.place_market_order(symbol,'sell',coinBalance[coin])
                         await ctx.send(cancel)
-                        await ctx.send("Sell", coinBalance[coin], coin, sell)
+                        await ctx.send(f"Sell, {coinBalance[coin]}, {coin}, {sell}")
                     else:
-                        await ctx.send("Keep",coin)
+                        await ctx.send(f"Keep {coin}")
 
             #Buy
             if openPositions < maxOpenPosition:
@@ -251,8 +251,8 @@ async def start(ctx):
                                 time.sleep(2)
                                 tp = ftx.place_limit_order(symbol,'sell',buyAmount,tpPrice)
                                 pass
-                            await ctx.send("Buy",buyAmount,coin,'at',buyPrice,buy)
-                            await ctx.send("Place",buyAmount,coin,"TP at",tpPrice, tp)
+                            await ctx.send(f"Buy {buyAmount}, {coin} at {buyPrice}, {buy}")
+                            await ctx.send(f"Place, {buyAmount}, {coin}, TP at, {tpPrice}, {tp}")
 
                             openPositions += 1
 
@@ -261,12 +261,12 @@ async def start(ctx):
             else:
                 await ctx.send("hold on")
 
-            await ctx.send("\n")
+            await ctx.send(".\n.")
             time.sleep(60)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
-            await ctx.send("\n")
+            await ctx.send("_\n_")
             continue
 
 
