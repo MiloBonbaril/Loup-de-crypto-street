@@ -145,9 +145,9 @@ class SpotFtx():
     def place_market_order(self, symbol, side, amount):
         try:
             return self._session.createOrder(
-                symbol, 
-                'market', 
-                side, 
+                symbol,
+                'market',
+                side,
                 self.convert_amount_to_precision(symbol, amount),
                 None
             )
@@ -159,10 +159,10 @@ class SpotFtx():
     def place_limit_order(self, symbol, side, amount, price):
         try:
             return self._session.createOrder(
-                symbol, 
-                'limit', 
-                side, 
-                self.convert_amount_to_precision(symbol, amount), 
+                symbol,
+                'limit',
+                side,
+                self.convert_amount_to_precision(symbol, amount),
                 self.convert_price_to_precision(symbol, price)
                 )
         except BaseException as err:
@@ -176,10 +176,10 @@ class SpotFtx():
         }
         try:
             return self._session.createOrder(
-                symbol, 
-                'stop', 
-                'sell', 
-                self.convert_amount_to_precision(symbol, amount), 
+                symbol,
+                'stop',
+                'sell',
+                self.convert_amount_to_precision(symbol, amount),
                 None,
                 params
                 )

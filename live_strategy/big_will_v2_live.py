@@ -1,5 +1,5 @@
 import sys
-sys.path.append('cBot-Project/utilities')
+sys.path.append('./utilities')
 from custom_indicators import CustomIndocators as ci
 from spot_ftx import SpotFtx
 import pandas as pd
@@ -8,8 +8,6 @@ import ccxt
 from datetime import datetime
 import time
 
-now = datetime.now()
-print(now.strftime("%d-%m %H:%M:%S"))
 
 ftx = SpotFtx(
         apiKey='W7wAYAev_e3ONda3Laa2T2l5A_5Vq0EJ1zbJHbyt',
@@ -66,6 +64,8 @@ TpPct = 0.15
 
 while True:
     try:
+        now = datetime.now()
+        print(now.strftime("%d-%m %H:%M:%S"))
         dfList = {}
         for pair in pairList:
             # print(pair)
@@ -176,3 +176,4 @@ while True:
     except Exception as e:
         print(f"Error: {e}")
         print("\n")
+        continue
