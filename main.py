@@ -30,13 +30,10 @@ def token():
         tf.close()
     return token
 
-#count the total of players
-def joueurs():
-    member_count = 0;
-
-    for guild in client.guilds:
-        member_count += guild.member_count
-    return member_count
+global tunes
+tunes = 0
+def je_possede_des_tunes():
+    return tunes
 
 #execute if main
 if __name__ == "__main__":
@@ -65,7 +62,7 @@ if __name__ == "__main__":
 @client.event
 async def on_ready():
     global status
-    status = cycle([f"""gérer {joueurs()} joueurs""",f"""gérer quelques problèmes""",f"""tapez "rpg help" pour avoir de l'aide"""])
+    status = cycle([f"""{je_possede_des_tunes()}$"""])
     change_status.start()
 
     with open("version","r") as v:
@@ -205,6 +202,8 @@ async def start(ctx):
             del coinBalance['USD']
             del coinInUsd['USD']
             totalBalanceInUsd = usdBalance + sum(coinInUsd.values())
+            tunes = totalBalanceInUsd
+            await ctx.send(f"{tunes}$")
             coinPositionList = []
             for coin in coinInUsd:
                 if coinInUsd[coin] > 0.05 * totalBalanceInUsd:
