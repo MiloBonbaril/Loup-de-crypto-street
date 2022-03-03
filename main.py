@@ -56,7 +56,7 @@ if __name__ == "__main__":
     description = """un bot gérant un rpg tout simplement"""
     bot = discord.Client()
     os.chdir("./stockage")
-    client = commands.Bot(command_prefix = "rpg ", description = description)
+    client = commands.Bot(command_prefix = "loup.", description = description)
 
 
 @client.event
@@ -131,10 +131,24 @@ async def start(ctx):
         'RUNE/USD',
         'SAND/USD',
         'CHZ/USD',
-        'CRV/USD'
+        'CRV/USD',
+        'LOOKS/USD',
+        'DOT/USD',
+        'ATOM/USD',
+        'WBTC/USD',
+        'YFI/USD',
+        'STETH/USD',
+        'YFII/USD',
+        'MKR/USD',
+        'XAUT/USD',
+        'PAXG/USD',
+        'COMP/USD',
+        'ROOK/USD',
+        'STSOL/USD',
+        'MSOL/USD'
     ]
 
-    timeframe = '1h'
+    timeframe = '1m'
 
     # -- Indicator variable --
     aoParam1 = 6
@@ -261,7 +275,7 @@ async def start(ctx):
                 await ctx.send("hold on")
 
             await ctx.send(".\n.")
-            time.sleep(60)
+            time.sleep(60*3)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
