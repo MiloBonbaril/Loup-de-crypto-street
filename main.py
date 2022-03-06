@@ -35,6 +35,10 @@ tunes = 0
 def je_possede_des_tunes():
     return tunes
 
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
 #execute if main
 if __name__ == "__main__":
     import discord
@@ -148,7 +152,7 @@ async def start(ctx):
         'MSOL/USD'
     ]
 
-    timeframe = '1m'
+    timeframe = '1h'
 
     # -- Indicator variable --
     aoParam1 = 6
@@ -157,7 +161,7 @@ async def start(ctx):
     willWindow = 14
 
     # -- Hyper parameters --
-    maxOpenPosition = 3
+    maxOpenPosition = 4
     stochOverBought = 0.8
     stochOverSold = 0.2
     willOverSold = -85
@@ -211,7 +215,11 @@ async def start(ctx):
                     return False
 
             coinBalance = ftx.get_all_balance()
+            if coinBalance == -1:
+                raise Error("Coin Balance\n")
             coinInUsd = ftx.get_all_balance_in_usd()
+            if coinInUsd == -1:
+                raise Error("Coin In Usd\n")
             usdBalance = coinBalance['USD']
             del coinBalance['USD']
             del coinInUsd['USD']
@@ -230,8 +238,12 @@ async def start(ctx):
                         openPositions -= 1
                         symbol = coin+'/USD'
                         cancel = ftx.cancel_all_open_order(symbol)
+                        if cancel == -1:
+                            raise Error("cancel\n")
                         time.sleep(1)
                         sell = ftx.place_market_order(symbol,'sell',coinBalance[coin])
+                        if sell == -1:
+                            raise Error("Sell\n")
                         await ctx.send(cancel)
                         await ctx.send(f"Sell, {coinBalance[coin]}, {coin}, {sell}")
                     else:
@@ -244,9 +256,13 @@ async def start(ctx):
                         if buyCondition(dfList[coin].iloc[-2], dfList[coin].iloc[-3]) == True and openPositions < maxOpenPosition:
                             time.sleep(1)
                             usdBalance = ftx.get_balance_of_one_coin('USD')
+                            if usdBalance == -1:
+                                raise Error("USD Balance\n")
                             symbol = coin+'/USD'
-
-                            buyPrice = float(ftx.convert_price_to_precision(symbol, ftx.get_bid_ask_price(symbol)['ask'])) 
+                            ask_price = ftx.get_bid_ask_price(symbol)
+                            if ask_price == -1:
+                                raise Error("ask_price\n")
+                            buyPrice = float(ftx.convert_price_to_precision(symbol, ask_price['ask']))
                             tpPrice = float(ftx.convert_price_to_precision(symbol, buyPrice + TpPct * buyPrice))
                             buyQuantityInUsd = usdBalance * 1/(maxOpenPosition-openPositions)
 
@@ -256,8 +272,12 @@ async def start(ctx):
                             buyAmount = ftx.convert_amount_to_precision(symbol, buyQuantityInUsd/buyPrice)
 
                             buy = ftx.place_market_order(symbol,'buy',buyAmount)
+                            if buy == -1:
+                                raise Error("BUY\n")
                             time.sleep(2)
                             tp = ftx.place_limit_order(symbol,'sell',buyAmount,tpPrice)
+                            if tp == -1:
+                                raise Error("TP\n")
                             try:
                                 tp["id"]
                             except:
@@ -275,7 +295,7 @@ async def start(ctx):
                 await ctx.send("hold on")
 
             await ctx.send(".\n.")
-            time.sleep(60*3)
+            time.sleep(60*20)
 
         except Exception as e:
             await ctx.send(f"Error: {e}")
@@ -309,11 +329,5 @@ async def on_message(message):
     with open(f"{guild}.json", "w") as fd:
         json.dump(js, fd, indent=2)
 """
-@client.event
-async def on_error(event, *args, **kwargs): #enregistre l'erreur
-    with open("./errors.log","w+") as err:
-        err.write(f"""{args[0]}\n""")
-        log = err.read()
-        print(log)
 
 client.run(token)

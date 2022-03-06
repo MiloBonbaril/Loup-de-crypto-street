@@ -24,7 +24,7 @@ class SpotFtx():
         def wrapped(self, *args, **kwargs):
             if not self._auth:
                 print("You must be authenticated to use this method", fn)
-                exit()
+                return -1
             else:
                 return fn(self, *args, **kwargs)
         return wrapped
@@ -91,7 +91,7 @@ class SpotFtx():
             ticker = self._session.fetchTicker(symbol)
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
         return {"bid":ticker["bid"],"ask":ticker["ask"]}
 
     def get_min_order_amount(self, symbol):
@@ -109,7 +109,7 @@ class SpotFtx():
             allBalance = self._session.fetchBalance()
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
         return allBalance['total']
 
     @authentication_required
@@ -126,7 +126,7 @@ class SpotFtx():
                         print("Cannot get price of",coin+'/USD')
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
         return allBalance
 
     @authentication_required
@@ -135,7 +135,7 @@ class SpotFtx():
             allBalance = self._session.fetchBalance()
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
         try:
             return allBalance['total'][coin]
         except:
@@ -153,7 +153,7 @@ class SpotFtx():
             )
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def place_limit_order(self, symbol, side, amount, price):
@@ -167,7 +167,7 @@ class SpotFtx():
                 )
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def place_market_stop_loss(self, symbol, amount, price):
@@ -185,7 +185,7 @@ class SpotFtx():
                 )
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def cancel_all_open_order(self, symbol):
@@ -193,7 +193,7 @@ class SpotFtx():
             return self._session.cancel_all_orders(symbol)
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def cancel_order_by_id(self, id):
@@ -201,7 +201,7 @@ class SpotFtx():
             return self._session.cancel_order(id)
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def get_open_order(self):
@@ -209,7 +209,7 @@ class SpotFtx():
             return self._session.fetchOpenOrders()
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def get_open_stop_order(self):
@@ -220,7 +220,7 @@ class SpotFtx():
             return self._session.fetchOpenOrders(None,None,None,params)
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
 
     @authentication_required
     def get_my_trades(self, symbol=None, since=None, limit=1):
@@ -228,4 +228,4 @@ class SpotFtx():
             return self._session.fetch_my_trades(symbol, since, limit)
         except BaseException as err:
             print("An error occured", err)
-            exit()
+            return -1
