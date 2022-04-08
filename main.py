@@ -102,9 +102,9 @@ async def start(ctx):
 
 
     ftx = SpotFtx(
-            apiKey='W7wAYAev_e3ONda3Laa2T2l5A_5Vq0EJ1zbJHbyt',
-            secret='AW6eeMWh7rJ3iYK_JxHGEZ9hK1HsAgv8B8stncUt',
-            subAccountName='LeLoup'
+            apiKey='',
+            secret='',
+            subAccountName=''
         )
 
     pairList = [
